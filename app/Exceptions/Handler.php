@@ -55,28 +55,67 @@ class Handler extends ExceptionHandler
      * @throws \Exception
      */
     public function render($request, Exception $exception)
-    {/*
-        if ($exception instanceof NotFoundHttpException) {
-            if ($request->segment(1) == 'api')
-                return response_api(false, 404, $exception->getMessage(), new \stdClass());
-            return redirect()->to(admin_vw() . '/home');
-        }
-        if ($exception instanceof QueryException) {
-            if ($request->segment(1) == 'api')
-                return response_api(false, 500, $exception->getMessage(), new \stdClass());
-            return redirect()->to(admin_vw() . '/home');
-        }
+    {
 
-        if ($exception instanceof ModelNotFoundException || $exception instanceof OAuthServerException) {
-            return response_api(false, 422, $exception->getMessage(), new \stdClass());
-        }
-*/
-//        if ($exception instanceof HttpException || $exception instanceof AuthenticationException) {
-//            if ($request->segment(1) == 'api' || $request->ajax())
-//                return response_api(false, 401, trans('app.unauthorized'), new \stdClass());
-//            return redirect()->to(admin_vw().'/login');
+        if ($request->segment(1) == 'api' || $request->ajax()) {
+            if ($exception instanceof NotFoundHttpException) {
+                return response_api(false, 404, []);
+            }
+//        if ($exception instanceof \ErrorException || $exception instanceof QueryException) {
+//            return response_api(false, 500, []);
 //        }
-        return parent::render($request, $exception);
+            if ($exception instanceof ModelNotFoundException || $exception instanceof OAuthServerException) {
+                return response_api(false, 422, null, []);
+            }
+        }
 
+
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+
+            $arr = array();
+            $errors_data = [];
+            $messages = $exception->errors();
+            $mainMessage = null;
+            foreach ($messages as $key => $row) {
+                $errors_data['fieldname'] = $key;
+                $errors_data['message'] = $row[0];
+                $arr[] = $errors_data;
+
+                if (!isset($mainMessage))
+                    $mainMessage = $row[0];
+            }
+            return response()->json(['status' => false, 'statusCode' => 422, 'message' => $mainMessage, 'items' => $arr]);
+//            return new JsonResponse($exception->errors(), 422);
+        }
+
+        if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+            // Code here ...
+            return response()->json([
+                'responseMessage' => 'You do not have the required authorization.',
+                'responseStatus' => 403,
+            ]);
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+
+        if ($request->expectsJson() || $request->segment(1) == 'api') {
+            return response_api(false, 401, null, []);
+        }
+
+        $guard = Arr::get($exception->guards(), 0);
+
+        switch ($guard) {
+            case 'admin':
+                $login = 'admin.login';
+                break;
+            default:
+                $login = 'login';
+                break;
+        }
+        return redirect()->guest(route($login));
     }
 }

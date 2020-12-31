@@ -18,7 +18,7 @@ return [
     'deleted' => 'تمت عملية الحذف بنجاح',
 
     'not_data_found' => 'لا يوجد بيانات',
-    'invalid_token' => 'رمز غير صالح',
+    'invalid_token' => 'البيانات غير صحيحة',
     'invalid_route' => 'رابط غير صالح',
     'client_input_error' => 'حدث خطأ من المستخدم',
     'server_error' => 'حدث خطأ من السيرفر',
