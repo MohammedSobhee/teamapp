@@ -84,6 +84,10 @@ class Handler extends ExceptionHandler
                 if (!isset($mainMessage))
                     $mainMessage = $row[0];
             }
+
+            if ($request->getMethod() == 'post' && request()->segment(1) == 'password') {
+                return redirect()->back()->withErrors($exception);
+            }
             return response()->json(['status' => false, 'statusCode' => 422, 'message' => $mainMessage, 'items' => $arr]);
 //            return new JsonResponse($exception->errors(), 422);
         }
