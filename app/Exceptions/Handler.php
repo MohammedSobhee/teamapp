@@ -85,7 +85,6 @@ class Handler extends ExceptionHandler
                     $mainMessage = $row[0];
             }
 
-            dd(request()->segment(1));
             if (request()->segment(1) == 'password') {
                 return redirect()->back()->withErrors($exception);
             }
