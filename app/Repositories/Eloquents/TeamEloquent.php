@@ -105,7 +105,7 @@ class TeamEloquent extends Uploader implements Repository
 //                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete"
 //                           title="حذف"><i class="la la-trash"></i></a>
             })->addIndexColumn()
-            ->rawColumns(['name','logo', 'is_active', 'status_action', 'action'])->toJson();
+            ->rawColumns(['name', 'logo', 'is_active', 'status_action', 'action'])->toJson();
     }
 
     function changeStatus($team_id, $league_id)
@@ -147,7 +147,7 @@ class TeamEloquent extends Uploader implements Repository
         if (isset($attributes['type'])) {
             if ($attributes['type'] == 'all_my_team') {
 
-                $team_ids = TeamPlayer::where('player_id', auth()->user()->id)->where('status','exist')->pluck('team_id');
+                $team_ids = TeamPlayer::where('player_id', auth()->user()->id)->where('status', 'exist')->pluck('team_id');
                 $collection = $collection->where(function ($query) use ($team_ids) {
                     $query->where('coach_id', auth()->user()->id)->orWhereIn('id', $team_ids);
                 });
@@ -223,7 +223,8 @@ class TeamEloquent extends Uploader implements Repository
                     $team_player = new TeamPlayer();
                 $team_player->team_id = $team->id;
                 $team_player->player_id = $player->player_id;
-                $team_player->position_id = $player->position_id;
+                if (isset($player->position_id))
+                    $team_player->position_id = $player->position_id;
                 $team_player->save();
             }
 

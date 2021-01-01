@@ -36,7 +36,7 @@ class CreateRequest extends FormRequest
             'bg_image' => 'nullable|image',
             'players' => 'required',
             'players_.*.player_id' => 'required|exists:users,id,is_active,1,type,player',
-            'players_.*.position_id' => 'required|exists:positions,id',
+            'players_.*.position_id' => 'nullable|exists:positions,id',
         ];
     }
 }
