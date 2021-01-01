@@ -86,6 +86,8 @@ class Handler extends ExceptionHandler
             }
 
             if (request()->segment(1) == 'password') {
+
+                app()->setLocale('en');
                 return redirect()->back()
                     ->withInput($request->only('email'))
                     ->withErrors($messages);
