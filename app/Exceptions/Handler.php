@@ -87,7 +87,7 @@ class Handler extends ExceptionHandler
 
             if (request()->segment(1) == 'password') {
 
-                dd($arr);
+                dd($messages);
                 return redirect()->back()
                     ->withInput($request->only('email'))
                     ->withErrors($arr);
