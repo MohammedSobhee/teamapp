@@ -84,26 +84,11 @@ class TeamEloquent extends Uploader implements Repository
                 }
             })->
             addColumn('action', function ($team) {
-                $url = '#';
                 $action = '';
-//                if (request()->filled('league_id')) {
-////                    $url = url(admin_leagues_url() . '/remove-team/' . request()->get('league_id') . '/' . $team->id);
-//
-//                    $action = '<span class="m-switch m-switch--icon m-switch--primary">
-//														<label>
-//															<input type="checkbox" checked="checked" name="">
-//															<span></span>
-//														</label>
-//													</span>';
-//                }
                 return $action . '<a href="' . url(admin_teams_url() . '/view/' . $team->id) . '"
                            class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
                            title="تعديل"><i class="la la-eye"></i></a>
-
                             ';
-//                <a href="' . $url . '"
-//                           class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete"
-//                           title="حذف"><i class="la la-trash"></i></a>
             })->addIndexColumn()
             ->rawColumns(['name', 'logo', 'is_active', 'status_action', 'action'])->toJson();
     }

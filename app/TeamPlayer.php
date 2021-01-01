@@ -19,7 +19,9 @@ class TeamPlayer extends Model
 
     public function getPositionNameAttribute()
     {
-        return $this->Position()->withTrashed()->first()->name;
+        if (isset($this->position_id))
+            return $this->Position()->withTrashed()->first()->name;
+        return null;
     }
 
 }
