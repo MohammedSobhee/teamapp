@@ -79,12 +79,15 @@ class League extends Model
     {
         if ($this->type == 'tournament')
             return $this->Groups()->orderBy('name')->get();
+        return [];
     }
 
     public function getGroupsResultAttribute()
     {
         if ($this->type == 'tournament')
             return GroupResource::collection($this->Groups()->orderBy('name')->get());
+        return [];
+
     }
 
     public function getResultsAttribute()

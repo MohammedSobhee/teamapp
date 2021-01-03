@@ -28,6 +28,7 @@ Route::get('/user/verify_page', 'Auth\RegisterController@verifyingPage');
 
 
 Route::prefix('admin')->group(function () {
+
     Route::get('/login', 'Auth\Admin\LoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\Admin\LoginController@login')->name('admin.login.submit');
     Route::get('/logout', 'Auth\Admin\LoginController@logout')->name('admin.logout');
